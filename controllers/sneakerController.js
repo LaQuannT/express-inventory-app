@@ -1,9 +1,19 @@
 const Sneaker = require("../models/sneaker");
+const Brand = require("../models/brand");
 
 const asyncHandler = require("express-async-handler");
 
 exports.index = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Index");
+  const [numSneakers, numBrands] = await Promise.all([
+    Sneaker.countDocuments({}).exec(),
+    Brand.countDocuments({}).exec(),
+  ]);
+
+  res.render("index", {
+    title: "My Sneaker Collection",
+    numSneakers,
+    numBrands,
+  });
 });
 
 exports.sneaker_list = asyncHandler(async (req, res, next) => {
