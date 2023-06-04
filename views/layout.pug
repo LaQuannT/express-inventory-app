@@ -1,7 +1,17 @@
 doctype html
-html
+html(lang="en")
   head
-    title= title
+    meta(charset="UTF-8")
+    meta(http-equiv="X-UA-Compatible", content="IE=edge")
+    meta(name="viewport", content="width=device-width, initial-scale=1.0")
     link(rel='stylesheet', href='/stylesheets/style.css')
-  body
-    block content
+    title Sneaker Collection App
+  body 
+  .container
+    nav 
+      h1 Sneaker Collection
+      div.nav-links 
+        a(href="/collection") Home
+        a(href="#") Brands
+        a(href="#") Sneakers
+      block content
