@@ -7,7 +7,7 @@ const SneakerSchema = new Schema({
   description: { type: String, required: true },
   colorway: { type: String, required: true },
   brand: { type: Schema.Types.ObjectId, ref: "Brand" },
-  price: { type: Number, required: true },
+  price: { type: "decimal", required: true },
   pairs: { type: Number, min: 1, required: true },
 });
 
