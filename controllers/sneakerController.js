@@ -23,7 +23,10 @@ exports.sneaker_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.sneaker_details = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker details");
+  const sneaker = await Sneaker.findById(req.params.id)
+    .populate("brand")
+    .exec();
+  res.render("sneaker_details", { sneaker });
 });
 
 exports.sneaker_create_get = asyncHandler(async (req, res, next) => {

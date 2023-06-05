@@ -1,0 +1,14 @@
+extends layout
+
+block content 
+
+  h1 #{sneaker.name}
+
+  p #{sneaker.description}
+
+  ul 
+    li Brand: 
+      a(href=sneaker.brand.url) #{sneaker.brand.name}
+    li Colorway: #{sneaker.colorway}
+    li Price: £#{sneaker.price}
+    li Pairs: #{sneaker.pairs}
