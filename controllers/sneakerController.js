@@ -17,7 +17,9 @@ exports.index = asyncHandler(async (req, res, next) => {
 });
 
 exports.sneaker_list = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker list");
+  const sneakerList = await Sneaker.find({}, "name").sort({ name: 1 }).exec();
+
+  res.render("sneaker_list", { title: "All Sneakers", sneakerList });
 });
 
 exports.sneaker_details = asyncHandler(async (req, res, next) => {

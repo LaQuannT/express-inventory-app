@@ -5,4 +5,6 @@ const sneaker_controller = require("../controllers/sneakerController");
 
 router.get("/", sneaker_controller.index);
 
+router.get("/sneaker/all", sneaker_controller.sneaker_list);
+
 module.exports = router;

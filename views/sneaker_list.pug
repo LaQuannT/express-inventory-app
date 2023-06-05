@@ -1,0 +1,12 @@
+extends layout
+
+block content 
+
+  h1=title 
+
+  ul
+    each sneaker in sneakerList
+      li
+        a(href=sneaker.url) #{sneaker.name}
+    else 
+      li There are no sneakers in this collection.
