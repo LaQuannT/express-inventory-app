@@ -1,4 +1,5 @@
 const Brand = require("../models/brand");
+const Sneaker = require("../models/sneaker");
 
 const asyncHandler = require("express-async-handler");
 
@@ -9,7 +10,22 @@ exports.brand_list = asyncHandler(async (req, res, next) => {
 });
 
 exports.brand_details = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Brand details");
+  const [brand, sneakersFromBrand] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Sneaker.find({ brand: req.params.id }, "name").exec(),
+  ]);
+
+  if (brand === null) {
+    const err = new Error("Brand not found");
+    err.status = 404;
+    next(err);
+  }
+
+  res.render("brand_details", {
+    title: "Brand Details",
+    brand,
+    sneakers: sneakersFromBrand,
+  });
 });
 
 exports.brand_create_get = asyncHandler(async (req, res, next) => {

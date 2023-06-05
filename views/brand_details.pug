@@ -1,0 +1,15 @@
+extends layout 
+
+block content
+
+  h1 #{title}: #{brand.name}
+
+  p #{brand.description}
+
+  ul
+    each sneaker in sneakers
+      li 
+        a(href='sneaker.url') #{sneaker.name}
+      
+    else 
+      li There are no sneakers in collection of #{brand.name}.
