@@ -86,11 +86,13 @@ exports.sneaker_create_post = [
 ];
 
 exports.sneaker_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker delete get");
+  const sneaker = await Sneaker.findById(req.params.id).exec();
+  res.render("sneaker_delete", { title: "Sneaker", sneaker });
 });
 
 exports.sneaker_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker delete post");
+  await Sneaker.findByIdAndRemove(req.body.sneakerid).exec();
+  res.redirect("/collection/sneakers");
 });
 
 exports.sneaker_update_get = asyncHandler(async (req, res, next) => {
