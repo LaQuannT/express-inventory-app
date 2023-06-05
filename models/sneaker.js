@@ -12,7 +12,7 @@ const SneakerSchema = new Schema({
 });
 
 SneakerSchema.virtual("url").get(function () {
-  return `/sneaker/${this._id}`;
+  return `/collection/sneaker/${this._id}`;
 });
 
 module.exports = mongoose.model("Sneaker", SneakerSchema);
