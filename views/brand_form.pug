@@ -11,7 +11,7 @@ block content
 
     div 
       label(for="description") Brand Description: 
-      textarea(cols="60", rows="5" name="description" placeholder='Enter Brand summary here...' value=(undefined===brand ? '': brand.description)) 
+      input(type='text' name="description" required='true' size=60 placeholder='Enter Brand summary here...' value=(undefined===brand ? '': brand.description)) 
 
     div
       button(type="submit") Submit

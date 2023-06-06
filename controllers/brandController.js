@@ -105,9 +105,44 @@ exports.brand_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.brand_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Brand update get");
+  const brand = await Brand.findById(req.params.id).exec();
+  res.render("brand_form", { title: "Update Brand", brand });
 });
 
-exports.brand_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Brand update post");
-});
+exports.brand_update_post = [
+  body("name")
+    .trim()
+    .isLength({ min: 3 })
+    .escape()
+    .withMessage("Brand name must contain at least 3 characters"),
+  body("description")
+    .trim()
+    .isLength({ min: 10 })
+    .escape()
+    .withMessage("Brand description must contain at least 10 characters"),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const brand = new Brand({
+      _id: req.params.id,
+      name: req.body.name,
+      description: req.body.description,
+    });
+
+    if (!errors.isEmpty())
+      res.render("brand_form", {
+        title: "Update Brand",
+        brand,
+        errors: errors.array(),
+      });
+    else {
+      const updateBrand = await Brand.findByIdAndUpdate(
+        req.params.id,
+        brand,
+        {}
+      );
+      res.redirect(updateBrand.url);
+    }
+  }),
+];
