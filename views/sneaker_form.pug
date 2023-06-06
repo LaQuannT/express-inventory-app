@@ -10,25 +10,28 @@ block content
       input(type='text' name='name', required='true' value=(undefined===sneaker ? '' : sneaker.name))
     div 
       label(for='description') Sneaker Description: 
-      textarea(name="description", cols="50", rows="6" value=(undefined===sneaker ? '' : sneaker.description)) 
+      input(type='text' name="description", size=45  required='true' value=(undefined===sneaker ? '' : sneaker.description)) 
 
     div 
       label(for='brand') Brand: 
       select(name="brand" placeholder='Select brand' required='true')
         for brand in brands
-          option(value=brand._id) #{brand.name}
+          if sneaker
+            option(value=brand._id selected=(brand._id.toString()===sneaker.brand._id.toString() ? 'selected' : false)) #{brand.name}
+          else 
+            option(value=brand._id) #{brand.name}
 
     div 
       label(for="colorway") Colorway: 
-      input(type="text", name="colorway" required='true', placeholder='Black/White etc.', value=(undefined===sneaker ? '' : sneaker.colorway))
+      input(type="text", name="colorway" required='true', placeholder='Black-White etc.', value=(undefined===sneaker ? '' : sneaker.colorway))
 
     div 
-      label(for="price") Price:
-      input(type='number' step='any' name='price' required='true' placeholder=12.99 value=(undefined===sneaker ? '' : sneaker.price))
+      label(for="price") Price in £:
+      input(type='text' placeholder:='79.00' name='price' required='true' pattern='\\d{1,3}(?:[.,]\\d{3})*(?:[.,]\\d{2})'  value=(undefined===sneaker ? '' : sneaker.price))
 
     div
       label(for="pairs") Pairs Owned: 
-      input(type='number' name='pairs' placeholder=1  min=1 required='true' value=(undefined===sneaker ? '' : sneaker.pairs))
+      input(type='number' name='pairs' min=1 required='true' value=(undefined===sneaker ? 1 : sneaker.pairs))
 
     div
       button(type="submit") Submit

@@ -52,8 +52,9 @@ exports.sneaker_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("price", "Price must be a value with 2 decimal places.")
-    .isFloat({ min: 0.0 })
+  body("price", "Price must not be empty.")
+    .trim()
+    .isLength({ min: 1, max: 7 })
     .escape(),
   body("pairs", "Must contain at least 1 pair.").isNumeric().escape(),
 
@@ -70,7 +71,7 @@ exports.sneaker_create_post = [
     });
 
     if (!errors.isEmpty()) {
-      const validBrands = await Brand.find().exec();
+      const validBrands = await Brand.find().sort({ name: 1 }).exec();
 
       res.render("sneaker_form", {
         title: "Add Sneaker",
@@ -96,9 +97,63 @@ exports.sneaker_delete_post = asyncHandler(async (req, res, next) => {
 });
 
 exports.sneaker_update_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker update get");
+  const [sneaker, brands] = await Promise.all([
+    Sneaker.findById(req.params.id).exec(),
+    Brand.find({}).exec(),
+  ]);
+
+  res.render("sneaker_form", { title: "Update Sneaker", sneaker, brands });
 });
 
-exports.sneaker_update_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Sneaker update post");
-});
+exports.sneaker_update_post = [
+  body("name", "Name must not be empty.").trim().isLength({ min: 1 }).escape(),
+  body("description", "Description must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("colorway", "Coloway must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("brand", "Brand must not be empty.")
+    .trim()
+    .isLength({ min: 1 })
+    .escape(),
+  body("price", "Price must not be empty.")
+    .trim()
+    .isLength({ min: 1, max: 7 })
+    .escape(),
+  body("pairs", "Must contain at least 1 pair.").isNumeric().escape(),
+
+  asyncHandler(async (req, res, next) => {
+    const errors = validationResult(req);
+
+    const sneaker = new Sneaker({
+      name: req.body.name,
+      description: req.body.description,
+      colorway: req.body.colorway,
+      brand: req.body.brand,
+      price: req.body.price,
+      pairs: req.body.pairs,
+      _id: req.params.id,
+    });
+
+    if (!errors.isEmpty()) {
+      const brands = await Brand.find().sort({ name: 1 }).exec();
+
+      res.render("sneaker_form", {
+        title: "Update Sneaker",
+        brands,
+        sneaker,
+        errors: errors.array(),
+      });
+    } else {
+      const updatedSneaker = await Sneaker.findByIdAndUpdate(
+        req.params.id,
+        sneaker,
+        {}
+      );
+      res.redirect(updatedSneaker.url);
+    }
+  }),
+];
