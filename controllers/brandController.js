@@ -74,11 +74,34 @@ exports.brand_create_post = [
 ];
 
 exports.brand_delete_get = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Brand delete get");
+  const [brand, sneakerList] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Sneaker.find({ brand: req.params.id }, "name").exec(),
+  ]);
+  res.render("Brand_delete", {
+    title: "Delete Brand",
+    brand,
+    sneakerList,
+  });
 });
 
 exports.brand_delete_post = asyncHandler(async (req, res, next) => {
-  res.send("NOT IMPLENTED: Brand delete post");
+  const [brand, sneakerUsingBrand] = await Promise.all([
+    Brand.findById(req.params.id).exec(),
+    Sneaker.find({ brand: req.params.id }, "name").exec(),
+  ]);
+
+  if (sneakerUsingBrand.length > 0) {
+    res.render("Brand_delete", {
+      title: "Delete Brand",
+      brand,
+      sneakerList: sneakerUsingBrand,
+    });
+    return;
+  } else {
+    await Brand.findByIdAndRemove(req.params.id);
+    res.redirect("/collection/brands");
+  }
 });
 
 exports.brand_update_get = asyncHandler(async (req, res, next) => {

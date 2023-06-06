@@ -1,0 +1,21 @@
+extends layout
+
+block content
+
+  h1 #{title}: #{brand.name}
+
+  if sneakerList.length 
+
+    p You must delete the listed sneakers first.
+
+    url 
+      each sneaker in sneakerList
+        li
+          a(href=sneaker.url) #{sneaker.name}
+
+  else
+    p Do you really want to do delete #{brand.name}?
+
+    form(action="", method="post")
+      input(type='hidden' required='true' value=brand._id) 
+      button(type="submit") Delete
